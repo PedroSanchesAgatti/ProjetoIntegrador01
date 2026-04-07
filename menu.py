@@ -149,8 +149,3 @@ while inicio != "3":
             print("Saindo...")
         case _:
             print("Opção inválida\n")
-
-
-    
-        
-            
