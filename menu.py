@@ -1,4 +1,4 @@
-inicio = "
+inicio = ""
 while inicio != "3":
     print(f"\nInício")
     print(f"\n----------------------------Sistema de Votação----------------------------------")
