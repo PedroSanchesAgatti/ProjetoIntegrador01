@@ -1,3 +1,50 @@
+import mysql.connector
+from mysql.connector import Error
+
+# 1. Configuração Única da Conexão (Centralizada)
+db_config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': '@@PHSAg3474', # Usando a senha que você forneceu no dump
+    'database': 'pis'
+}
+
+try:
+    conexao = mysql.connector.connect(**db_config)
+    cursor = conexao.cursor()
+except Error as e:
+    print(f"ERRO DE CONEXÃO: {e}")
+    exit()
+
+def verificacaoCPF(cpf):
+    # 1. Verificações Matemáticas (Formato)
+    if len(cpf) != 11 or cpf == cpf[0] * 11:
+        return False
+
+    for i in range(9, 11):
+        valor = sum(int(cpf[num]) * ((i + 1) - num) for num in range(i))
+        digito = ((valor * 10) % 11) % 10
+        if digito != int(cpf[i]):
+            return False
+            
+    # 2. Verificação de Disponibilidade (Banco de Dados)
+    # Usamos a conexão global já estabelecida
+    try:
+        query = "SELECT id FROM eleitores WHERE cpf = %s"
+        cursor.execute(query, (cpf,))
+        resultado = cursor.fetchone()
+        
+        # Se encontrou resultado, o CPF JÁ ESTÁ cadastrado
+        if resultado is not None:
+            return "CADASTRADO" 
+                
+    except Error as e:
+        print(f"Erro ao consultar banco: {e}")
+        return False 
+
+    # Se chegou aqui, o CPF é válido e NÃO existe no banco
+    return True 
+
 inicio = ""
 while inicio != "3":
     print(f"\nInício")
@@ -115,7 +162,21 @@ while inicio != "3":
                                 case "4":
                                     pass
                                 case "5":
-                                    pass
+                                    cpf_digitado = input("Digite o CPF apenas números: ")
+                                    cpf_limpo = ""
+                                    for char in cpf_digitado:
+                                        if char.isdigit():
+                                            cpf_limpo = cpf_limpo + char
+                        
+                                    status_cpf = verificacaoCPF(cpf_limpo)
+                                    
+                                    if status_cpf == True:
+                                        print(f"O CPF {cpf_digitado} é VÁLIDO e disponível para cadastro.")
+                                    elif status_cpf == "CADASTRADO":
+                                        print(f"ERRO: O CPF {cpf_digitado} já está cadastrado no sistema.")
+                                    else:
+                                        print(f"ERRO: O CPF {cpf_digitado} é INVÁLIDO.")
+
                                 case "6":
                                     print("Voltando...\n")
                                 case _:
@@ -149,3 +210,8 @@ while inicio != "3":
             print("Saindo...")
         case _:
             print("Opção inválida\n")
+
+# Fechar conexão ao sair
+if 'conexao' in locals() and conexao.is_connected():
+    cursor.close()
+    conexao.close()
