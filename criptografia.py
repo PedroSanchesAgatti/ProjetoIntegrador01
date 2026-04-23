@@ -69,13 +69,3 @@ def descriptografia(palavra):
 
 
 
-
-print(criptografia(input("Digite a palavra: ").upper()))
-print(descriptografia(input("Digite a palavra: ").upper()))
-
-
-
-
-
-print(criptografia(input("Digite a palavra: ").upper()))
-print(descriptografia(input("Digite a palavra: ").upper()))
