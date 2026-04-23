@@ -14,7 +14,7 @@ def multiplicacao_matrizes(matrix_1, matrix_2):
     return resultado
 
 def criptografia(palavra):
-    lista = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
+    lista = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
     chave = [[4, 3], [1, 2]]
     x = [[], []]
     cont = 0
@@ -42,7 +42,7 @@ def criptografia(palavra):
 
 
 def descriptografia(palavra):
-    lista = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
+    lista = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
     chave = [[58, -87], [-29, 116]]
     x = [[], []]
     cont = 0
@@ -65,6 +65,13 @@ def descriptografia(palavra):
     if par==False:
         resultado=resultado[:-1]
     return resultado
+
+
+
+
+
+print(criptografia(input("Digite a palavra: ").upper()))
+print(descriptografia(input("Digite a palavra: ").upper()))
 
 
 
