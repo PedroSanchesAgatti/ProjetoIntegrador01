@@ -1,28 +1,4 @@
-def criptografia(palavra):
-    lista = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
-    chave = [[16, 18], [15, 17]]
-    x = [[], []]
-    cont = 0
-
-    if len(palavra) % 2 == 1:
-        palavra += "A"
-
-    for letra in palavra:
-        if cont % 2 == 0:
-            x[0].append(lista.index(letra))
-        else:
-            x[1].append(lista.index(letra))
-        cont += 1
-    matrix=multiplicacao_matrizes(chave,x)
-    matrix=[[x%36 for x in row]for row in matrix]
-    resultado=""
-    for j in range(len(matrix[0])):
-        resultado+=lista[matrix[0][j]]
-        resultado+=lista[matrix[1][j]]
-    if len(palavra)%2 ==1:
-        resultado+="K"
-    return resultado
-
+import random
 
 def multiplicacao_matrizes(matrix_1, matrix_2):
     resultado = []
@@ -37,9 +13,62 @@ def multiplicacao_matrizes(matrix_1, matrix_2):
 
     return resultado
 
+def criptografia(palavra):
+    lista = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
+    chave = [[4, 3], [1, 2]]
+    x = [[], []]
+    cont = 0
+    par=True
+
+    if len(palavra) % 2 == 1:
+        palavra += lista[random.randint(0,35)]
+        par=False
+
+    for letra in palavra:
+        if cont % 2 == 0:
+            x[0].append(lista.index(letra))
+        else:
+            x[1].append(lista.index(letra))
+        cont += 1
+    matrix=multiplicacao_matrizes(chave,x)
+    matrix=[[x%36 for x in row]for row in matrix]
+    resultado=""
+    for j in range(len(matrix[0])):
+        resultado+=lista[matrix[0][j]]
+        resultado+=lista[matrix[1][j]]
+    if par==False:
+        resultado += lista[random.randint(0,35)]
+    return resultado
+
+
+def descriptografia(palavra):
+    lista = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
+    chave = [[58, -87], [-29, 116]]
+    x = [[], []]
+    cont = 0
+    par=True
+    if len(palavra) % 2 == 1:
+        palavra =palavra[:-1]
+        par=False
+    for letra in palavra:
+        if cont % 2 == 0:
+            x[0].append(lista.index(letra))
+        else:
+            x[1].append(lista.index(letra))
+        cont += 1
+    matrix=multiplicacao_matrizes(chave,x)
+    matrix=[[x%36 for x in row]for row in matrix]
+    resultado=""
+    for j in range(len(matrix[0])):
+        resultado+=lista[matrix[0][j]]
+        resultado+=lista[matrix[1][j]]
+    if par==False:
+        resultado=resultado[:-1]
+    return resultado
 
 
 
 
 
-criptografia(input("Digite a palavra: ").upper())
+print(criptografia(input("Digite a palavra: ").upper()))
+print(descriptografia(input("Digite a palavra: ").upper()))
