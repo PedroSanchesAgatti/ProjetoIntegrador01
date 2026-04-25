@@ -2,9 +2,9 @@ import mysql.connector
 
 conexao = mysql.connector.connect(
     host='localhost',
-    user='seu_usuario',
-    password='sua_senha',
-    database='seu_banco'
+    user='root',
+    password='Senha',
+    database='BAnco'
 )
 
 cursor = conexao.cursor()
@@ -92,6 +92,16 @@ def listar_votos():
     
     for eleitor, candidato, data in cursor.fetchall():
         print(f"Eleitor: {eleitor} | Candidato: {candidato} | Data: {data}")
+
+def verificar_titulo_eleitor(titulo):
+    sql = """
+    SELECT COUNT(*) FROM eleitores
+    WHERE titulo = %s
+    """
+    cursor.execute(sql, (titulo,))
+    resultado = cursor.fetchone()[0]
+    return resultado > 0
+
 
 
 def fechar_conexao():

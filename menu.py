@@ -1,5 +1,58 @@
 
-from sql_insert import inserir_eleitor, listar_eleitores, buscar_eleitor, fechar_conexao
+from sql_insert import inserir_eleitor, listar_eleitores, buscar_eleitor, verificar_titulo_eleitor,fechar_conexao
+
+def validar_titulo_eleitor(titulo):
+    titulo_limpo = ""
+    for char in titulo:
+        if char.isdigit():
+            titulo_limpo = titulo_limpo + char
+
+    if len(titulo_limpo) != 12:
+        return False
+
+    
+    # (DV1)
+    soma = 0
+    multiplicador = 2
+    for i in range(8):
+        soma = soma + (int(titulo_limpo[i]) * multiplicador)
+        multiplicador = multiplicador + 1
+    
+    resto = soma % 11
+    if resto == 10:
+        dv1 = 0
+    else:
+        dv1 = resto
+
+    # Regra para UF (9º e 10º dígitos)
+    uf = int(titulo_limpo[8] + titulo_limpo[9])
+    
+    # Regra especial para SP (01) e MG (02)
+    if (uf == 1 or uf == 2) and resto == 0:
+        dv1 = 1
+
+    # Verifica o primeiro DV
+    if dv1 != int(titulo_limpo[10]):
+        return False
+
+    # (DV2)
+    soma = (int(titulo_limpo[8]) * 7) + (int(titulo_limpo[9]) * 8) + (dv1 * 9)
+    
+    resto = soma % 11
+    if resto == 10:
+        dv2 = 0
+    else:
+        dv2 = resto
+
+    # Regra especial para SP e MG 
+    if (uf == 1 or uf == 2) and resto == 0:
+        dv2 = 1
+
+    if dv2 != int(titulo_limpo[11]):
+        return False
+
+    return True
+
 
 
 def verificacaoCPF(cpf):
@@ -159,9 +212,14 @@ while inicio != "3":
                                         print(f"O CPF {cpf_digitado} é VÁLIDO e disponível para cadastro.")
 
                                         titulo = input("Título: ")
-                                        mesario = input("Mesário (s/n): ").lower() == "s"
-                                        chave = input("Chave de acesso: ")
-                                        inserir_eleitor(nome, cpf_limpo, titulo, mesario, chave)
+                                        if not validar_titulo_eleitor(titulo):
+                                            print(f"ERRO: O Título de Eleitor {titulo} é INVÁLIDO.")
+                                        elif verificar_titulo_eleitor(titulo):
+                                            print(f"ERRO: O Título de Eleitor {titulo} já está cadastrado.")
+                                        else:
+                                            mesario = input("Mesário (s/n): ").lower() == "s"
+                                            chave = input("Chave de acesso: ")
+                                            inserir_eleitor(nome, cpf_limpo, titulo, mesario, chave)
     
                                     elif status_cpf == "CADASTRADO":
                                         print(f"ERRO: O CPF {cpf_digitado} já está cadastrado no sistema.")
