@@ -208,7 +208,7 @@ while inicio != "3":
                                     if status_cpf == True:
                                         print(f"O CPF {cpf_digitado} é VÁLIDO e disponível para cadastro.")
                                         titulo=int(input("Título: "))
-                                        if not validarTitulo(titulo):
+                                        if not validacaoTitulo(titulo):
                                             print(f"ERRO: O Título de Eleitor {titulo} é INVÁLIDO.")
                                         elif verificar_titulo_eleitor(titulo):
                                             print(f"ERRO: O Título de Eleitor {titulo} já está cadastrado.")
