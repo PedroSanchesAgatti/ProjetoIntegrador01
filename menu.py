@@ -1,14 +1,14 @@
 
 from sql_insert import inserir_eleitor, listar_eleitores, buscar_eleitor, fechar_conexao
 
-def validacaoTitulo(titulo2):
-    titulo=str(titulo2)
-    faltando=12-len(titulo)
+def validacaoTitulo(titulo):
+    titulo2=str(titulo)
+    faltando=12-len(titulo2)
 
     if faltando>0:
-        titulo=("0" * faltando)+titulo
+        titulo=("0" * faltando)+titulo2
     else:
-        if len(titulo)!=12:
+        if len(titulo2)!=12:
             return False
 
     inicial=titulo[:8]
@@ -207,7 +207,7 @@ while inicio != "3":
                                     
                                     if status_cpf == True:
                                         print(f"O CPF {cpf_digitado} é VÁLIDO e disponível para cadastro.")
-                                        titulo = input("Título: ")
+                                        titulo=int(input("Título: "))
                                         if not validarTitulo(titulo):
                                             print(f"ERRO: O Título de Eleitor {titulo} é INVÁLIDO.")
                                         elif verificar_titulo_eleitor(titulo):
