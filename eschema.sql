@@ -39,7 +39,6 @@ CREATE TABLE configuracao_votacao (
 );
 
 
-INSERTS:
 INSERT INTO configuracao_votacao VALUES (1, FALSE);
 
 INSERT INTO eleitores (nome, cpf, titulo, mesario, chave_acesso, status_voto) VALUES 
