@@ -5,8 +5,8 @@ import os
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='Seppal1914#',
-    database='sistema_votacao'
+    password='Henriquetutiya0906@',
+    database='Mydatabase'
 )
 
 cursor = conexao.cursor()
@@ -161,7 +161,7 @@ def verificao_mesarrio(titulo,cpf, chave):
 
     titulo_db, cpf_db, chave_db, mesario = resultado
 
-    return cpf_db[:3] == cpf[:3] and chave_db == chave and mesario==1 and titulo_db == titulo
+    return cpf_db == cpf[:3] and chave_db == chave and mesario==1 and titulo_db == titulo
 
 def verificao_votacao(titulo, cpf, chave):
     sql = """
@@ -178,7 +178,7 @@ def verificao_votacao(titulo, cpf, chave):
 
     titulo_db, cpf_db, chave_db, status = resultado
 
-    return titulo_db == titulo and cpf_db[:3] == cpf[:3] and chave_db == chave , status
+    return titulo_db == titulo and cpf_db == cpf[:3] and chave_db == chave , status
 
 def registrar_log(mensagem):
     data_hora = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
@@ -211,3 +211,33 @@ def exibir_protocolos():
     else:
         print("Nenhum protocolo encontrado.")
 
+
+def buscar_candidato(valor):
+    sql = """
+    SELECT id, nome, numero, partido
+    FROM candidatos
+    WHERE numero = %s
+    """
+    
+    cursor.execute(sql, (valor,))
+    resultado = cursor.fetchall()
+
+    if resultado:
+        for id, nome, numero, partido in resultado:
+            print(f"ID: {id} | Nome: {nome} | Número: {numero} | Partido: {partido} ")
+    else:
+        print("Nenhum candidato encontrado.")
+
+def excluir_candidato(valor):
+    sql = """
+    DELETE FROM candidatos
+    WHERE numero = %s 
+    """
+
+    cursor.execute(sql, (valor,))
+
+    if cursor.rowcount > 0:
+        conexao.commit()
+        print("\nCandidato deletado com sucesso!")
+    else:
+        print("\nNenhum candidato encontrado.")

@@ -16,10 +16,10 @@ def validacaoTitulo(titulo):
         if len(titulo2)!=12:
             return False
 
-    inicial=titulo[:8]
-    uf=titulo[8:10]
-    dvtitulo=int(titulo[10])
-    dvtitulo2=int(titulo[11])
+    inicial=str(titulo)[:8]
+    uf=str(titulo)[8:10]
+    dvtitulo=int(str(titulo)[10])
+    dvtitulo2=int(str(titulo)[11])
 
     pesos1=[2,3,4,5,6,7,8,9]
     soma=0
@@ -282,15 +282,18 @@ while inicio != "3":
                             Candidatos=input("Escolha a opção desejada:")
                             match Candidatos:
                                 case "1":
-                                    pass
+                                    sql_insert.buscar_candidato(input("\nDigite o número do candidato para a busca: "))
                                 case "2":
-                                    pass
+                                    nome = input("\nDigite o nome do candidato: ")
+                                    numero = int(input("\nDigite o número do candidato: "))
+                                    partido = input("\nDigite o partido do candidato: ")
+                                    sql_insert.inserir_candidato(nome, numero, partido)
                                 case "3":
                                     pass
                                 case "4":
-                                    pass
+                                    sql_insert.excluir_candidato(int(input("\nDigite o número do candidato: ")))
                                 case "5":
-                                    pass
+                                    sql_insert.listar_candidatos()
                                 case "6":
                                     print("Voltando...")
                                 case _:
