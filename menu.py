@@ -111,7 +111,11 @@ while inicio != "3":
                                 case "3":
                                     editar_candidato()
                                 case "4":
+
                                     remover_candidato()
+
+                                    sql_insert.excluir_candidato(int(input("\nDigite o número do candidato: ")))
+
                                 case "5":
                                     sql_insert.listar_candidatos()
                                 case "6":
