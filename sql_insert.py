@@ -47,6 +47,7 @@ def buscar_candidato(numero):
             f"Número: {numero} | "
             f"Partido: {partido}"
         )
+        return resultado
 
     else:
 
