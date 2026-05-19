@@ -62,7 +62,7 @@ while inicio != "3":
                                 case "3":
                                     sql_insert.validar_integridade()
                                 case "4":
-                                    sql_insert.votos_por_partido()
+                                    sql_insert.votos_partido()
                                 case "5":
                                     print("Voltando...\n")
                                 case _:
