@@ -1,5 +1,3 @@
-#modularizar e organizar os imports
-
 import sql_insert
 from sql_insert import inserir_eleitor, verificao_mesarrio, registrar_voto, verificao_votacao, listar_candidatos,  encerrar_votacao, votacao_esta_aberta, registrar_log, exibir_logs, exibir_protocolos, listar_eleitores, buscar_eleitor, verificar_titulo_eleitor, fechar_conexao, abrir_votacao, encerrar_votacao, votacao_esta_aberta
 import random
@@ -18,10 +16,10 @@ def validacaoTitulo(titulo):
         if len(titulo2)!=12:
             return False
 
-    inicial=titulo[:8]
-    uf=titulo[8:10]
-    dvtitulo=int(titulo[10])
-    dvtitulo2=int(titulo[11])
+    inicial=str(titulo)[:8]
+    uf=str(titulo)[8:10]
+    dvtitulo=int(str(titulo)[10])
+    dvtitulo2=int(str(titulo)[11])
 
     pesos1=[2,3,4,5,6,7,8,9]
     soma=0
@@ -128,7 +126,7 @@ while inicio != "3":
                                     registrar_log("ABERTURA: Votação aberta com sucesso.")
                                 else:
                                     print("\n❌ ERRO: Credenciais do mesário inválidas.\n")
-#fazer a zerezima
+
                                     registrar_log("ABERTURA: Tentativa de abertura de votação com credenciais inválidas.")
                             else:
                                 print("A votação já está aberta!")
@@ -149,7 +147,6 @@ while inicio != "3":
                                         break
                                     listar_candidatos()
                                     while votacao_esta_aberta():
-                                        #fazer
                                         print(f"\n----------------------------Votação---------------------------------------------")
                                         print("\n1-Cancelar voto\n2-Confirmar voto\n")
                                         Votar=input("Escolha a opção desejada:")
@@ -163,7 +160,7 @@ while inicio != "3":
                                                 Abrir_sistema="3"
                                             case _:
                                                 print("Opção inválida\n")
-                                #confirmação se vai encerrar
+                                
                                 case "2":
                                     if votacao_esta_aberta():
                                         titulo_mesario = input("Digite o título do mesário: ")
@@ -241,7 +238,6 @@ while inicio != "3":
                                 case "3":
                                     listar_eleitores()
                                 case "4":
-                                 #fazer
                                     print("Edição ainda não implementada\n")
                                 case "5":
                                     nome = input("Digite o nome do eleitor: ")
@@ -256,7 +252,7 @@ while inicio != "3":
                                                 cpf_limpo = cpf_limpo + char
                             
                                         status_cpf = verificacaoCPF(cpf_limpo)
-                                        #botar o while
+                                        
                                         if status_cpf == True:
                                             print(f"O CPF {cpf_digitado} é VÁLIDO e disponível para cadastro.")
                                             titulo=int(input("Título: "))
@@ -286,15 +282,18 @@ while inicio != "3":
                             Candidatos=input("Escolha a opção desejada:")
                             match Candidatos:
                                 case "1":
-                                    pass
+                                    sql_insert.buscar_candidato(input("\nDigite o número do candidato para a busca: "))
                                 case "2":
-                                    pass
+                                    nome = input("\nDigite o nome do candidato: ")
+                                    numero = int(input("\nDigite o número do candidato: "))
+                                    partido = input("\nDigite o partido do candidato: ")
+                                    sql_insert.inserir_candidato(nome, numero, partido)
                                 case "3":
                                     pass
                                 case "4":
-                                    pass
+                                    sql_insert.excluir_candidato(int(input("\nDigite o número do candidato: ")))
                                 case "5":
-                                    pass
+                                    sql_insert.listar_candidatos()
                                 case "6":
                                     print("Voltando...")
                                 case _:
