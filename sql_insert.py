@@ -15,14 +15,24 @@ cursor = conexao.cursor()
 # CANDIDATOS
 # =========================
 
-def inserir_candidato(nome, numero, partido):
-    sql = "INSERT INTO candidatos (nome, numero, partido) VALUES (%s, %s, %s)"
-    
-    valores = (nome, numero, partido)
-    cursor.execute(sql, valores)
-    conexao.commit()
-    
-    print("Candidato cadastrado com sucesso!")
+def inserir_candidato():
+    continuar = "s"
+
+    while continuar== "s":
+        print("\n=== CADASTRO DE CANDIDATO ===")
+
+        nome=input("Nome: ")
+        numero=input("Número: ")
+        partido=input("Partido: ")
+
+        sql="INSERT INTO candidatos (nome, numero, partido) VALUES (%s, %s, %s)"
+        valores=(nome, numero, partido)
+        cursor.execute(sql, valores)
+        conexao.commit()
+
+        print("\nCandidato cadastrado com sucesso!")
+        continuar=input("\nCadastrar outro candidato? (s/n): ").lower()
+
 
 
 def buscar_candidato(numero):
@@ -115,19 +125,36 @@ def listar_candidatos():
 # ELEITORES
 # =========================
 
+def inserir_eleitor():
+    continuar="s"
 
-def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
-    sql = """
-    INSERT INTO eleitores 
-    (nome, cpf, titulo, mesario, chave_acesso) 
-    VALUES (%s, %s, %s, %s, %s)
-    """
-    
-    valores = (nome, cpf, titulo, mesario, chave_acesso)
-    cursor.execute(sql, valores)
-    conexao.commit()
-    
-    print("Eleitor cadastrado com sucesso!")
+    while continuar=="s":
+        print("\n=== CADASTRO DE ELEITOR ===")
+        nome=input("Nome: ")
+        cpf=input("CPF (11 dígitos): ")
+        titulo= input("Título de eleitor: ")
+        mesario_resposta=input("É mesário? (s/n): ").lower()
+        
+        if mesario_resp== "s":
+            mesario = 1
+            print("Eleitor cadastrado como MESÁRIO.")
+        else:
+            mesario = 0
+        
+        chave_acesso=input("Chave de acesso (será usada para login): ")
+
+        sql = """
+        INSERT INTO eleitores 
+        (nome, cpf, titulo, mesario, chave_acesso) 
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        valores=(nome, cpf, titulo, mesario, chave_acesso)
+        cursor.execute(sql, valores)
+        conexao.commit()
+        
+        print("\nEleitor cadastrado com sucesso!")
+        print(f"Chave de acesso do eleitor: {chave_acesso}")
+        continuar=input("\nCadastrar outro eleitor? (s/n): ").lower()
 
 def buscar_eleitor(valor):
     sql = """
