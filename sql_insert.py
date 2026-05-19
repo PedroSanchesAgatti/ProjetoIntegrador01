@@ -47,6 +47,7 @@ def buscar_candidato(numero):
             f"Número: {numero} | "
             f"Partido: {partido}"
         )
+        return resultado
 
     else:
 
@@ -130,7 +131,7 @@ def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
 
 def buscar_eleitor(valor):
     sql = """
-    SELECT id, nome, cpf, titulo, status_voto 
+    SELECT id, nome, cpf, titulo, status_voto , mesario
     FROM eleitores
     WHERE titulo = %s OR cpf = %s
     """
@@ -139,17 +140,17 @@ def buscar_eleitor(valor):
     resultado = cursor.fetchall()
 
     if resultado:
-        for id, nome, cpf, titulo, status in resultado:
-            print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status}")
+        for id, nome, cpf, titulo, status, mesario in resultado:
+            print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status} | Mesário: {mesario}")
     else:
         print("Nenhum eleitor encontrado.")
 
 def listar_eleitores():
-    cursor.execute("SELECT id, nome, cpf, titulo, status_voto FROM eleitores")
+    cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario FROM eleitores")
     
-    for (id, nome, cpf, titulo, status) in cursor.fetchall():
-        print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status}")
-
+    for (id, nome, cpf, titulo, status, mesario) in cursor.fetchall():
+        print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status} | Mesário: {mesario}")
+        
 def excluir_eleitor(valor):
     sql = """
     DELETE FROM eleitores
