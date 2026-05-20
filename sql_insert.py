@@ -1,12 +1,13 @@
 import mysql.connector
 import datetime
 import os
+from criptografia import *
 
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='Seppal1914#',
-    database='sistema_votacao1'
+    password='@@PHSAg3474',
+    database='TestesPI'
 )
 
 cursor = conexao.cursor()
@@ -47,10 +48,12 @@ def buscar_candidato(numero):
             f"Número: {numero} | "
             f"Partido: {partido}"
         )
+        return resultado
 
     else:
 
         print("Candidato não encontrado.")
+        return resultado
 
 def remover_candidato(numero):
 
@@ -116,31 +119,37 @@ def listar_candidatos():
 
 
 def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
+    chave_criptografada = criptografia(chave_acesso)
+    cpf_criptografada = criptografia(cpf)
+    titulo_criptografada = criptografia(titulo)
     sql = """
     INSERT INTO eleitores 
     (nome, cpf, titulo, mesario, chave_acesso) 
     VALUES (%s, %s, %s, %s, %s)
     """
     
-    valores = (nome, cpf, titulo, mesario, chave_acesso)
+    valores = (nome, cpf_criptografada, titulo_criptografada, mesario, chave_criptografada)
     cursor.execute(sql, valores)
     conexao.commit()
     
     print("Eleitor cadastrado com sucesso!")
 
 def buscar_eleitor(valor):
+    valor_criptografada = criptografia(valor)
     sql = """
     SELECT id, nome, cpf, titulo, status_voto 
     FROM eleitores
     WHERE titulo = %s OR cpf = %s
     """
     
-    cursor.execute(sql, (valor, valor))
+    cursor.execute(sql, (valor_criptografada, valor_criptografada))
     resultado = cursor.fetchall()
-
+    
     if resultado:
         for id, nome, cpf, titulo, status in resultado:
-            print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status}")
+            cpf_criptografada = descriptografia(cpf)
+            titulo_criptografada = descriptografia(titulo)
+            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {status}")
     else:
         print("Nenhum eleitor encontrado.")
 
@@ -155,8 +164,8 @@ def excluir_eleitor(valor):
     DELETE FROM eleitores
     WHERE cpf = %s OR titulo = %s
     """
-
-    cursor.execute(sql, (valor, valor))
+    valor_criptografada = criptografia(valor)
+    cursor.execute(sql, (valor_criptografada, valor_criptografada))
 
     if cursor.rowcount > 0:
         conexao.commit()
@@ -169,7 +178,8 @@ def verificar_titulo_eleitor(titulo):
     SELECT COUNT(*) FROM eleitores
     WHERE titulo = %s
     """
-    cursor.execute(sql, (titulo,))
+    titulo_criptografada = criptografia(titulo)
+    cursor.execute(sql, (titulo_criptografada,))
     resultado = cursor.fetchone()[0]
     return resultado > 0
 
@@ -178,7 +188,8 @@ def editar_eleitor(
     novo_nome,
     novo_titulo
 ):
-
+    cpf_criptografada = criptografia(cpf)
+    titulo_criptografada = criptografia(novo_titulo)
     sql = """
     UPDATE eleitores
     SET nome = %s,
@@ -188,8 +199,8 @@ def editar_eleitor(
 
     valores = (
         novo_nome,
-        novo_titulo,
-        cpf
+        titulo_criptografada,
+        cpf_criptografada
     )
 
     cursor.execute(sql, valores)
@@ -489,16 +500,19 @@ def verificao_votacao(titulo, cpf, chave):
     FROM eleitores
     WHERE chave_acesso = %s
     """
+    chave_criptografada = criptografia(chave)
 
-    cursor.execute(sql, (chave,))
+    cursor.execute(sql, (chave_criptografada,))
     resultado = cursor.fetchone()
 
     if resultado is None:
         return None
 
     id_eleitor, titulo_db, cpf_db, chave_db, status = resultado
-
-    if titulo_db == titulo and cpf_db[:4] == cpf[:4] and chave_db == chave:
+    titulo_db_criptografada = criptografia(titulo)
+    cpf_db_criptografada = criptografia(cpf)
+    chave_db_criptografada = criptografia(chave)
+    if titulo_db == titulo_db_criptografada and cpf_db[:4] == cpf_db_criptografada[:4] and chave_db == chave_db_criptografada:
         return id_eleitor, status
     else:
         return None
