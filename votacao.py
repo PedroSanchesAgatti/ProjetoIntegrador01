@@ -1,6 +1,6 @@
 import random
 import sql_insert
-
+from criptografia import *
 
 def abrir():
 
@@ -45,9 +45,13 @@ def votar():
         print("\n❌ A votação está fechada.\n")
         return
 
-    titulo = input("Digite o título do eleitor: ")
-    cpf = input("Digite os 4 primeiros dígitos do CPF: ")
-    chave = input("Digite a chave de acesso: ")
+    titulo = input("Digite o título do eleitor: ").upper().strip()
+    cpf = input("Digite os 4 primeiros dígitos do CPF: ").upper().strip()
+    chave = input("Digite a chave de acesso: ").upper().strip()
+
+    
+    titulo = titulo.replace(".", "").replace("-", "")
+    cpf = cpf.replace(".", "").replace("-", "")
 
     resultado = sql_insert.verificao_votacao(titulo, cpf, chave)
 
@@ -90,7 +94,7 @@ def votar():
 
         else:
 
-            id_candidato, nome, partido = candidato
+            id_candidato, nome, numero_candidato, partido = candidato
 
             print("\n=========== CONFIRMAÇÃO ===========")
             print(f"Nome: {nome}")
@@ -106,9 +110,11 @@ def votar():
 
     # gerar protocolo
     protocolo = random.randint(100000, 999999)
+    protocolo_str = str(protocolo)
 
     # registrar voto
-    sql_insert.registrar_voto(id_eleitor, id_candidato, protocolo)
+    protocolo_criptografada = criptografia(protocolo_str)
+    sql_insert.registrar_voto(id_eleitor, id_candidato, protocolo_criptografada)
 
     print("\n✅ Voto confirmado!")
     print(f"Candidato: {nome} ({numero} - {partido})")
