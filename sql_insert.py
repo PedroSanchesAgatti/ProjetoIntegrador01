@@ -16,14 +16,24 @@ cursor = conexao.cursor()
 # CANDIDATOS
 # =========================
 
-def inserir_candidato(nome, numero, partido):
-    sql = "INSERT INTO candidatos (nome, numero, partido) VALUES (%s, %s, %s)"
-    
-    valores = (nome, numero, partido)
-    cursor.execute(sql, valores)
-    conexao.commit()
-    
-    print("Candidato cadastrado com sucesso!")
+def inserir_candidato():
+    continuar = "s"
+
+    while continuar== "s":
+        print("\n=== CADASTRO DE CANDIDATO ===")
+
+        nome=input("Nome: ")
+        numero=input("Número: ")
+        partido=input("Partido: ")
+
+        sql="INSERT INTO candidatos (nome, numero, partido) VALUES (%s, %s, %s)"
+        valores=(nome, numero, partido)
+        cursor.execute(sql, valores)
+        conexao.commit()
+
+        print("\nCandidato cadastrado com sucesso!")
+        continuar=input("\nCadastrar outro candidato? (s/n): ").lower()
+
 
 
 def buscar_candidato(numero):
@@ -137,7 +147,7 @@ def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
 def buscar_eleitor(valor):
     valor_criptografada = criptografia(valor)
     sql = """
-    SELECT id, nome, cpf, titulo, status_voto 
+    SELECT id, nome, cpf, titulo, status_voto , mesario
     FROM eleitores
     WHERE titulo = %s OR cpf = %s
     """
@@ -154,11 +164,11 @@ def buscar_eleitor(valor):
         print("Nenhum eleitor encontrado.")
 
 def listar_eleitores():
-    cursor.execute("SELECT id, nome, cpf, titulo, status_voto FROM eleitores")
+    cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario FROM eleitores")
     
-    for (id, nome, cpf, titulo, status) in cursor.fetchall():
-        print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status}")
-
+    for (id, nome, cpf, titulo, status, mesario) in cursor.fetchall():
+        print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status} | Mesário: {mesario}")
+        
 def excluir_eleitor(valor):
     sql = """
     DELETE FROM eleitores
