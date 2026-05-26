@@ -1,6 +1,17 @@
 import random
 
 def multiplicacao_matrizes(matrix_1, matrix_2):
+    """
+    Realiza a multiplicação entre duas matrizes.
+
+    Args:
+        matrix_1 (list): Primeira matriz.
+        matrix_2 (list): Segunda matriz.
+
+    Returns:
+        lista: Matriz resultante da multiplicação.
+    """
+    
     resultado = []
     for i in range(len(matrix_1)):
         linha = []
@@ -14,6 +25,19 @@ def multiplicacao_matrizes(matrix_1, matrix_2):
     return resultado
 
 def criptografia(palavra):
+    """
+    Criptografa utilizando multiplicação matricial.
+
+    A função converte os caracteres em índices,
+    aplica uma matriz chave e retorna a string criptografada.
+
+    Args:
+        palavra (str): Texto a ser criptografado.
+
+    Returns:
+        str: Texto criptografado.
+    """
+    
     lista = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
     chave = [[4, 3], [1, 2]]
     x = [[], []]
@@ -42,6 +66,19 @@ def criptografia(palavra):
 
 
 def descriptografia(palavra):
+    """
+    Descriptografa 
+
+    A função aplica a matriz inversa da criptografia
+    e retorna o texto original.
+
+    Args:
+        palavra (str): Texto criptografado.
+
+    Returns:
+        str: Texto descriptografado.
+    """
+    
     lista = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
     chave = [[58, -87], [-29, 116]]
     x = [[], []]
