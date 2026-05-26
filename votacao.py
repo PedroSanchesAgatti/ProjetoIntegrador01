@@ -10,7 +10,7 @@ def abrir():
 
     titulo_mesario = input("Digite o título do mesário: ")
     cpf_mesario = input("Digite os 4 primeiros dígitos do CPF do mesário: ")
-    chave_mesario = input("Digite a chave de acesso do mesário: ")
+    chave_mesario = criptografia(input("Digite a chave de acesso do mesário: "))
 
     autorizado = sql_insert.verificacao_mesario(
         titulo_mesario,
