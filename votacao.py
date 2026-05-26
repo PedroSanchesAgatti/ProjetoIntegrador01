@@ -138,7 +138,7 @@ def encerrar():
 
     titulo_mesario = input("Digite o título do mesário: ")
     cpf_mesario = input("Digite os 4 primeiros dígitos do CPF: ")
-    chave_mesario = input("Digite a chave de acesso: ")
+    chave_mesario = criptografia(input("Digite a chave de acesso: "))
 
     if sql_insert.verificacao_mesario(
         titulo_mesario,
@@ -146,10 +146,9 @@ def encerrar():
         chave_mesario
     ):
 
-        chave_confirmacao = input(
+        chave_confirmacao = criptografia(input(
             "\nDigite novamente a chave para confirmar: "
-        )
-
+        ))
         if chave_confirmacao != chave_mesario:
 
             print("\n❌ Chave de confirmação incorreta.\n")
