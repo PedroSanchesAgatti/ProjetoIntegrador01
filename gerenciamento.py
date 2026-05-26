@@ -30,6 +30,9 @@ def cadastrar_eleitor():
         if not verificacaoCPF(cpf):
             print("CPF inválido\n")
             continue
+        if sql_insert.verificar_cpf_banco(cpf):
+            print("cpf já cadastrado\n")
+            continue
 
         titulo = input("Digite o título: ")
 

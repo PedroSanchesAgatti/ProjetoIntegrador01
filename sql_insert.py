@@ -194,6 +194,15 @@ def verificar_titulo_eleitor(titulo):
     cursor.execute(sql, (titulo_criptografada,))
     resultado = cursor.fetchone()[0]
     return resultado > 0
+def verificar_cpf_banco(cpf):
+    sql = """
+    SELECT COUNT(*) FROM eleitores
+    WHERE cpf = %s
+    """
+    cpf_criptografada = criptografia(cpf)
+    cursor.execute(sql, (cpf_criptografada,))
+    resultado = cursor.fetchone()[0]
+    return resultado > 0
 
 def editar_eleitor(
     cpf,
