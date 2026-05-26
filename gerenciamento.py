@@ -6,6 +6,16 @@ from validacoes import validacaoTitulo, verificacaoCPF
 def cadastrar_eleitor():
     """
     Realiza o cadastro de um eleitor.
+
+    Solicita nome, CPF e título, valida os dados,
+    verifica duplicidade no banco e gera uma chave
+    de acesso automática para o eleitor.
+
+    Args:
+        None
+
+    Returns:
+        None
     """
 
     continuar = "s"
@@ -47,8 +57,7 @@ def cadastrar_eleitor():
         # mesário (True ou False)
         resposta = input("Mesário? (s/n): ").lower()
         mesario = True if resposta == "s" else False
-
-        # gerar chave simples
+        
         primeira_letra = nome[0].upper()
         segunda_letra = nome[1].upper()
         letra_sobrenome = nome[nome.find(" ") + 1].upper()
@@ -66,7 +75,17 @@ def cadastrar_eleitor():
 
 def editar_eleitor():
     """
-    Edita os dados de um eleitor.
+    Edita os dados de um eleitor existente.
+
+    Solicita CPF, novo nome e novo título,
+    valida os dados informados e atualiza
+    as informações no banco de dados.
+
+    Args:
+        None
+
+    Returns:
+        None
     """
 
     cpf = input("Digite o CPF do eleitor: ")
@@ -75,36 +94,34 @@ def editar_eleitor():
 
     # Validação do nome
     if " " not in novo_nome:
-        print("❌ Nome inválido")
+        print(" Nome inválido")
         return
 
     # Validação do título
     if not validacaoTitulo(novo_titulo):
-        print("❌ Título inválido")
+        print(" Título inválido")
         return
 
     # Atualização no banco
     sql_insert.editar_eleitor(cpf, novo_nome, novo_titulo)
 
-    print("✅ Eleitor atualizado com sucesso!")
+    print(" Eleitor atualizado com sucesso!")
     
-def cadastrar_candidato():
-    sql_insert.inserir_candidato()
-def buscar_candidato():
 
-    numero = input(
-        "Número do candidato: "
-    )
-
-    sql_insert.buscar_candidato(numero)
-def remover_candidato():
-
-    numero = input(
-        "Número do candidato: "
-    )
-
-    sql_insert.remover_candidato(numero)
 def editar_candidato():
+    """
+    Edita os dados de um candidato.
+
+    Solicita o número do candidato, o novo nome
+    e o novo partido, atualizando as informações
+    no banco de dados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
 
     numero = input(
         "Número do candidato: "

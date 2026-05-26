@@ -105,13 +105,13 @@ while inicio != "3":
                             Candidatos=input("Escolha a opção desejada:")
                             match Candidatos:
                                 case "1":
-                                    buscar_candidato()
+                                    numero = input("Digite o número do candidato para busca: ")
+                                    sql_insert.buscar_candidato(numero) 
                                 case "2":
-                                    cadastrar_candidato()
+                                    sql_insert.inserir_candidato()
                                 case "3":
                                     editar_candidato()
                                 case "4":
-
                                     sql_insert.remover_candidato(int(input("\nDigite o número do candidato: ")))
 
                                 case "5":
