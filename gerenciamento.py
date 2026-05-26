@@ -89,18 +89,7 @@ def editar_eleitor():
     print("✅ Eleitor atualizado com sucesso!")
     
 def cadastrar_candidato():
-
-    nome = input("Nome do candidato: ")
-
-    numero = input("Número do candidato: ")
-
-    partido = input("Partido: ")
-
-    sql_insert.inserir_candidato(
-        nome,
-        numero,
-        partido
-    )
+    sql_insert.inserir_candidato()
 def buscar_candidato():
 
     numero = input(
