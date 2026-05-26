@@ -3,6 +3,12 @@ import sql_insert
 from criptografia import *
 
 def abrir():
+    """
+    Abre a votação no sistema.
+
+    Solicita autenticação do mesário
+    e inicia oficialmente a votação.
+    """
 
     if sql_insert.votacao_esta_aberta():
         print("\nA votação já está aberta!\n")
@@ -121,6 +127,12 @@ def votar():
     print(f"Protocolo: {protocolo}\n")
 
 def encerrar():
+    """
+    Encerra a votação.
+
+    Solicita autenticação e confirmação
+    do mesário antes de finalizar o processo.
+    """
 
     if not sql_insert.votacao_esta_aberta():
 
