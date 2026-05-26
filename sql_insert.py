@@ -6,8 +6,8 @@ from criptografia import *
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='Henriquetutiya0906@',
-    database='Mydatabase'
+    password='senha',
+    database='database'
 )
 
 cursor = conexao.cursor()
