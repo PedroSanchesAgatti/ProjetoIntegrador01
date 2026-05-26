@@ -6,8 +6,8 @@ from criptografia import *
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='@@PHSAg3474',
-    database='TestesPI'
+    password='senha',
+    database='database'
 )
 
 cursor = conexao.cursor()
@@ -156,10 +156,10 @@ def buscar_eleitor(valor):
     resultado = cursor.fetchall()
     
     if resultado:
-        for id, nome, cpf, titulo, status in resultado:
+        for id, nome, cpf, titulo, status, mesario in resultado:
             cpf_criptografada = descriptografia(cpf)
             titulo_criptografada = descriptografia(titulo)
-            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {status}")
+            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"}")
     else:
         print("Nenhum eleitor encontrado.")
 
@@ -167,7 +167,9 @@ def listar_eleitores():
     cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario FROM eleitores")
     
     for (id, nome, cpf, titulo, status, mesario) in cursor.fetchall():
-        print(f"ID: {id} | Nome: {nome} | CPF: {cpf} | Titulo: {titulo} | Votou: {status} | Mesário: {mesario}")
+        cpf_criptografada = descriptografia(cpf)
+        titulo_criptografada = descriptografia(titulo)
+        print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"}")
         
 def excluir_eleitor(valor):
     sql = """
@@ -541,8 +543,10 @@ def verificacao_mesario(titulo, cpf, chave):
         return False
 
     titulo_db, cpf_db, chave_db, mesario = resultado
+    titulo_db = descriptografia(titulo_db)
+    cpf_db = descriptografia(cpf_db)
 
-    return cpf_db[:4] == cpf[:4] and chave_db == chave and mesario==1 and titulo_db == titulo
+    return titulo_db == titulo and cpf_db[:4] == cpf and chave_db == chave and mesario == 1
 
 def registrar_voto(id_eleitor, id_candidato, protocolo):
     sql = """

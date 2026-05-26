@@ -68,4 +68,3 @@ def descriptografia(palavra):
 
 
 
-
