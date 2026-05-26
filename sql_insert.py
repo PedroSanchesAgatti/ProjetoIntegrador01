@@ -12,11 +12,23 @@ conexao = mysql.connector.connect(
 
 cursor = conexao.cursor()
 
-# =========================
+
 # CANDIDATOS
-# =========================
 
 def inserir_candidato():
+
+    """
+    Realiza o cadastro de candidatos no banco de dados.
+
+    Permite inserir múltiplos candidatos em sequência,
+    solicitando nome, número e partido via input.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     continuar = "s"
 
     while continuar== "s":
@@ -37,7 +49,15 @@ def inserir_candidato():
 
 
 def buscar_candidato(numero):
+    """
+    Busca um candidato pelo número.
 
+    Args:
+        numero (str): Número do candidato.
+
+    Returns:
+        tuple | None: Dados do candidato encontrado ou None.
+    """
     sql = """
     SELECT id, nome, numero, partido
     FROM candidatos
@@ -66,7 +86,15 @@ def buscar_candidato(numero):
         return resultado
 
 def remover_candidato(numero):
+    """
+    Remove um candidato pelo número.
 
+    Args:
+        numero (str): Número do candidato.
+
+    Returns:
+        None
+    """
     sql = """
     DELETE FROM candidatos
     WHERE numero = %s
@@ -89,7 +117,17 @@ def editar_candidato(
     novo_nome,
     novo_partido
 ):
+    """
+    Atualiza nome e partido de um candidato.
 
+    Args:
+        numero (str): Número do candidato.
+        novo_nome (str): Novo nome.
+        novo_partido (str): Novo partido.
+
+    Returns:
+        None
+    """
     sql = """
     UPDATE candidatos
     SET nome = %s,
@@ -116,19 +154,39 @@ def editar_candidato(
         print("Candidato não encontrado.") 
 
 def listar_candidatos():
+    """
+    Lista todos os candidatos cadastrados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     cursor.execute("SELECT id, nome, numero, partido FROM candidatos")
     
     for (id, nome, numero, partido) in cursor.fetchall():
         print(f"ID: {id} | Nome: {nome} | Numero: {numero} | Partido: {partido}")
 
 
-
-# =========================
 # ELEITORES
-# =========================
 
 
 def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
+    """
+    Insere um novo eleitor no banco com dados criptografados.
+
+    Args:
+        nome (str): Nome do eleitor.
+        cpf (str): CPF do eleitor.
+        titulo (str): Título de eleitor.
+        mesario (int): Indica se é mesário (1 ou 0).
+        chave_acesso (str): Chave de acesso.
+
+    Returns:
+        None
+    """
+
     chave_criptografada = criptografia(chave_acesso)
     cpf_criptografada = criptografia(cpf)
     titulo_criptografada = criptografia(titulo)
@@ -145,6 +203,16 @@ def inserir_eleitor(nome, cpf, titulo, mesario, chave_acesso):
     print("Eleitor cadastrado com sucesso!")
 
 def buscar_eleitor(valor):
+    """
+    Busca um eleitor pelo título ou CPF.
+
+    Args:
+        valor (str): Título ou CPF do eleitor.
+
+    Returns:
+        None
+    """
+    
     valor_criptografada = criptografia(valor)
     sql = """
     SELECT id, nome, cpf, titulo, status_voto , mesario
@@ -164,6 +232,15 @@ def buscar_eleitor(valor):
         print("Nenhum eleitor encontrado.")
 
 def listar_eleitores():
+    """
+    Lista todos os eleitores cadastrados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario FROM eleitores")
     
     for (id, nome, cpf, titulo, status, mesario) in cursor.fetchall():
@@ -172,10 +249,20 @@ def listar_eleitores():
         print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"}")
         
 def excluir_eleitor(valor):
+    """
+    Remove um eleitor pelo CPF ou título.
+
+    Args:
+        valor (str): CPF ou título.
+
+    Returns:
+        None
+    """
     sql = """
     DELETE FROM eleitores
     WHERE cpf = %s OR titulo = %s
     """
+
     valor_criptografada = criptografia(valor)
     cursor.execute(sql, (valor_criptografada, valor_criptografada))
 
@@ -186,19 +273,41 @@ def excluir_eleitor(valor):
         print("\nNenhum eleitor encontrado.")
 
 def verificar_titulo_eleitor(titulo):
+    """
+    Verifica se um título já existe no banco.
+
+    Args:
+        titulo (str): Título de eleitor.
+
+    Returns:
+        bool: True se existir, False caso contrário.
+    """
     sql = """
     SELECT COUNT(*) FROM eleitores
     WHERE titulo = %s
     """
+
     titulo_criptografada = criptografia(titulo)
     cursor.execute(sql, (titulo_criptografada,))
     resultado = cursor.fetchone()[0]
     return resultado > 0
+
+
 def verificar_cpf_banco(cpf):
+    """
+    Verifica se um CPF já existe no banco.
+
+    Args:
+        cpf (str): CPF do eleitor.
+
+    Returns:
+        bool: True se existir, False caso contrário.
+    """
     sql = """
     SELECT COUNT(*) FROM eleitores
     WHERE cpf = %s
     """
+
     cpf_criptografada = criptografia(cpf)
     cursor.execute(sql, (cpf_criptografada,))
     resultado = cursor.fetchone()[0]
@@ -209,6 +318,18 @@ def editar_eleitor(
     novo_nome,
     novo_titulo
 ):
+    """
+    Atualiza dados de um eleitor.
+
+    Args:
+        cpf (str): CPF do eleitor.
+        novo_nome (str): Novo nome.
+        novo_titulo (str): Novo título.
+
+    Returns:
+        None
+    """
+
     cpf_criptografada = criptografia(cpf)
     titulo_criptografada = criptografia(novo_titulo)
     sql = """
@@ -237,9 +358,7 @@ def editar_eleitor(
         print("Eleitor não encontrado.")
 
 
-# =========================
 # RELATÓRIOS
-# =========================
 
 
 def validar_integridade():
@@ -281,19 +400,39 @@ def validar_integridade():
 
     if total_votos == total_eleitores:
 
-        print("\n✅ Integridade válida.")
+        print("\n Integridade válida.")
 
     else:
 
-        print("\n❌ Inconsistência encontrada.")
+        print("\n Inconsistência encontrada.")
 
 def registrar_log(mensagem):
+    """
+    Registra uma mensagem de log com data e hora.
+
+    Args:
+        mensagem (str): Mensagem a ser registrada.
+
+    Returns:
+        None
+    """
+        
     data_hora = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
 
     with open("logs_ocorrencias.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(f"{data_hora} {mensagem}\n")
 
 def exibir_logs():
+    """
+    Exibe todos os logs registrados no sistema.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
     if not os.path.exists("logs_ocorrencias.txt"):
         print("Nenhum log encontrado.")
         return
@@ -304,6 +443,16 @@ def exibir_logs():
         print(arquivo.read())
 
 def exibir_protocolos():
+    """
+    Lista todos os protocolos de votação registrados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
     cursor.execute("""
         SELECT protocolo
         FROM votos
@@ -375,6 +524,7 @@ def zerezima():
     registrar_log(
         "ABERTURA: Zerézima realizada com sucesso."
     )
+
 def boletim_urna():
 
     """
@@ -448,6 +598,7 @@ def boletim_urna():
             f"Partido: {vencedor[2]} | "
             f"Votos: {vencedor[3]}"
         )
+
 def estatistica_comparecimento():
 
     """
@@ -497,11 +648,22 @@ def estatistica_comparecimento():
     print(f"Percentual: {percentual:.2f}%")
 
 
-# =========================
 # VOTAÇÃO
-# =========================
 
 def abrir_votacao():
+    """
+    Abre a votação no sistema.
+
+    Ativa a flag no banco, realiza zerézima
+    e registra log.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
     cursor.execute("UPDATE configuracao_votacao SET votacao_aberta = TRUE WHERE id = 1")
     conexao.commit()
 
@@ -512,6 +674,17 @@ def abrir_votacao():
     print("Votação aberta!")
 
 def encerrar_votacao():
+    """
+    Encerra a votação no sistema.
+
+    Atualiza o status no banco e registra log.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     cursor.execute("UPDATE configuracao_votacao SET votacao_aberta = FALSE WHERE id = 1")
     conexao.commit()
 
@@ -520,10 +693,32 @@ def encerrar_votacao():
     print("Votação encerrada!")
 
 def votacao_esta_aberta():
+    """
+    Verifica se a votação está aberta.
+
+    Args:
+        None
+
+    Returns:
+        bool: True se aberta, False caso contrário.
+    """
+
     cursor.execute("SELECT votacao_aberta FROM configuracao_votacao WHERE id = 1")
     return cursor.fetchone()[0]
 
 def verificao_votacao(titulo, cpf, chave):
+    """
+    Valida dados do eleitor para permitir votação.
+
+    Args:
+        titulo (str): Título.
+        cpf (str): CPF.
+        chave (str): Chave de acesso.
+
+    Returns:
+        tuple | None: (id_eleitor, status) ou None.
+    """
+
     sql = """
     SELECT id, titulo, cpf, chave_acesso, status_voto
     FROM eleitores
@@ -547,6 +742,18 @@ def verificao_votacao(titulo, cpf, chave):
         return None
 
 def verificacao_mesario(titulo, cpf, chave):
+    """
+    Verifica se o usuário é um mesário válido.
+
+    Args:
+        titulo (str): Título.
+        cpf (str): CPF.
+        chave (str): Chave.
+
+    Returns:
+        bool: True se for mesário válido.
+    """
+
     sql = """
     SELECT titulo ,cpf, chave_acesso, mesario
     FROM eleitores
@@ -566,6 +773,20 @@ def verificacao_mesario(titulo, cpf, chave):
     return titulo_db == titulo and cpf_db[:4] == cpf and chave_db == chave and mesario == 1
 
 def registrar_voto(id_eleitor, id_candidato, protocolo):
+    """
+    Registra um voto no sistema.
+
+    Também atualiza o status do eleitor.
+
+    Args:
+        id_eleitor (int): ID do eleitor.
+        id_candidato (int): ID do candidato.
+        protocolo (str): Código de confirmação.
+
+    Returns:
+        None
+    """
+
     sql = """
     INSERT INTO votos (id_eleitor, id_candidato, protocolo)
     VALUES (%s, %s, %s)
@@ -623,6 +844,16 @@ def votos_partido():
 
 
 def listar_votos():
+    """
+    Lista todos os votos registrados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
     cursor.execute("""
     SELECT e.nome, c.nome, v.data_hora
     FROM votos v
@@ -633,10 +864,19 @@ def listar_votos():
     for eleitor, candidato, data in cursor.fetchall():
         print(f"Eleitor: {eleitor} | Candidato: {candidato} | Data: {data}")
 
-# =========================
+
 # FINALIZAÇÃO
-# =========================
 
 def fechar_conexao():
+    """
+    Fecha a conexão com o banco de dados.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    
     cursor.close()
     conexao.close()

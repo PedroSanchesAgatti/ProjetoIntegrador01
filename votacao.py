@@ -28,7 +28,7 @@ def abrir():
 
         sql_insert.abrir_votacao()
 
-        print("\n✅ Votação aberta com sucesso!\n")
+        print("\n Votação aberta com sucesso!\n")
 
         sql_insert.registrar_log(
             "ABERTURA: Votação aberta com sucesso."
@@ -36,7 +36,7 @@ def abrir():
 
     else:
 
-        print("\n❌ Credenciais inválidas.\n")
+        print("\n Credenciais inválidas.\n")
 
         sql_insert.registrar_log(
             "ABERTURA: Tentativa inválida."
@@ -48,7 +48,7 @@ def votar():
     """
 
     if not sql_insert.votacao_esta_aberta():
-        print("\n❌ A votação está fechada.\n")
+        print("\n A votação está fechada.\n")
         return
 
     titulo = input("Digite o título do eleitor: ").upper().strip()
@@ -62,14 +62,14 @@ def votar():
     resultado = sql_insert.verificao_votacao(titulo, cpf, chave)
 
     if resultado is None:
-        print("\n❌ Dados inválidos.\n")
+        print("\n Dados inválidos.\n")
         sql_insert.registrar_log("ALERTA: Tentativa de acesso negado.")
         return
 
     id_eleitor, status = resultado
 
     if status == 1:
-        print("\n❌ Eleitor já votou.\n")
+        print("\n Eleitor já votou.\n")
         sql_insert.registrar_log("ALERTA: Tentativa de voto duplo.")
         return
 
@@ -85,7 +85,7 @@ def votar():
         # VOTO NULO
         if candidato is None:
 
-            print("\n⚠️ Número inexistente.")
+            print("\n Número inexistente.")
             print("O voto será NULO.")
 
             confirmar = input("\nConfirmar voto nulo? (s/n): ").lower()
@@ -122,7 +122,7 @@ def votar():
     protocolo_criptografada = criptografia(protocolo_str)
     sql_insert.registrar_voto(id_eleitor, id_candidato, protocolo_criptografada)
 
-    print("\n✅ Voto confirmado!")
+    print("\nVoto confirmado!")
     print(f"Candidato: {nome} ({numero} - {partido})")
     print(f"Protocolo: {protocolo}\n")
 
@@ -135,7 +135,6 @@ def encerrar():
     """
 
     if not sql_insert.votacao_esta_aberta():
-
         print("\nA votação já está encerrada.\n")
         return
     
@@ -148,22 +147,22 @@ def encerrar():
         cpf_mesario,
         chave_mesario
     ):
-    
-    confirmar = input(
-        "\nDeseja realmente encerrar? (s/n): "
-    ).lower()
 
-    if confirmar != "s":
+        confirmar = input(
+            "\nDeseja realmente encerrar? (s/n): "
+        ).lower()
 
-        print("\nEncerramento cancelado.\n")
-        return
+        if confirmar != "s":
+            print("\nEncerramento cancelado.\n")
+            return
 
         chave_confirmacao = criptografia(input(
             "\nDigite novamente a chave para confirmar: "
-        ))
+        ).upper().strip())
+
         if chave_confirmacao != chave_mesario:
 
-            print("\n❌ Chave de confirmação incorreta.\n")
+            print("\n Chave de confirmação incorreta.\n")
 
             sql_insert.registrar_log(
                 "ALERTA: Tentativa inválida de encerramento."
@@ -177,7 +176,7 @@ def encerrar():
 
     else:
 
-        print("\n❌ Credenciais inválidas.\n")
+        print("\n Credenciais inválidas.\n")
 
         sql_insert.registrar_log(
             "ALERTA: Tentativa de acesso negado."
