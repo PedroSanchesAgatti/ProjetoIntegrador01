@@ -1,4 +1,17 @@
 def validacaoTitulo(titulo):
+    """
+    Valida um título de eleitor.
+
+    Verifica tamanho, UF e dígitos verificadores
+    do título informado.
+
+    Args:
+        titulo (str): Número do título de eleitor.
+
+    Returns:
+        bool: True se o título for válido,
+        False caso contrário.
+    """
     titulo2=str(titulo)
     faltando=12-len(titulo2)
 
@@ -50,6 +63,19 @@ def validacaoTitulo(titulo):
     return True
 
 def verificacaoCPF(cpf):
+    """
+    Valida um CPF.
+
+    Verifica tamanho, repetição de dígitos
+    e dígitos verificadores do CPF.
+
+    Args:
+        cpf (str): CPF a ser validado.
+
+    Returns:
+        bool: True se o CPF for válido,
+        False caso contrário.
+    """
     if len(cpf) != 11:
         return False
     if cpf == cpf[0] * 11:
