@@ -429,7 +429,15 @@ def boletim_urna():
                 partido,
                 votos
             )
-
+    cursor.execute("""
+        SELECT COUNT(*) 
+        FROM votos 
+        WHERE id_candidato IS NULL
+    """)
+    
+    votos_nulos=cursor.fetchone()[0]
+    print(f"\nVotos nulos:{votos_nulos}")
+    
     if vencedor:
 
         print("\n=========== VENCEDOR ===========\n")
