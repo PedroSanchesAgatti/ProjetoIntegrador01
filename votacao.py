@@ -126,7 +126,17 @@ def encerrar():
 
         print("\nA votação já está encerrada.\n")
         return
-
+    
+    titulo_mesario = input("Digite o título do mesário: ")
+    cpf_mesario = input("Digite os 4 primeiros dígitos do CPF: ")
+    chave_mesario = criptografia(input("Digite a chave de acesso: ").upper().strip())
+    
+    if sql_insert.verificacao_mesario(
+        titulo_mesario,
+        cpf_mesario,
+        chave_mesario
+    ):
+    
     confirmar = input(
         "\nDeseja realmente encerrar? (s/n): "
     ).lower()
@@ -135,16 +145,6 @@ def encerrar():
 
         print("\nEncerramento cancelado.\n")
         return
-
-    titulo_mesario = input("Digite o título do mesário: ")
-    cpf_mesario = input("Digite os 4 primeiros dígitos do CPF: ")
-    chave_mesario = criptografia(input("Digite a chave de acesso: ").upper().strip())
-
-    if sql_insert.verificacao_mesario(
-        titulo_mesario,
-        cpf_mesario,
-        chave_mesario
-    ):
 
         chave_confirmacao = criptografia(input(
             "\nDigite novamente a chave para confirmar: "
