@@ -115,16 +115,17 @@ def votar():
                 print("\nDigite novamente.\n")
 
     # gerar protocolo
-    protocolo = random.randint(100000, 999999)
-    protocolo_str = str(protocolo)
+    protocolo = "V" + chr(random.randint(ord('A'), ord('Z'))) + chr(random.randint(ord('A'), ord('Z'))) + "26" + numero +str(random.randint(0,99999))
+    
 
     # registrar voto
-    protocolo_criptografada = criptografia(protocolo_str)
+    protocolo_criptografada = criptografia(protocolo)
     sql_insert.registrar_voto(id_eleitor, id_candidato, protocolo_criptografada)
 
     print("\nVoto confirmado!")
     print(f"Candidato: {nome} ({numero} - {partido})")
     print(f"Protocolo: {protocolo}\n")
+
 
 def encerrar():
     """
