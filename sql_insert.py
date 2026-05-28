@@ -227,7 +227,8 @@ def buscar_eleitor(valor):
         for id, nome, cpf, titulo, status, mesario, chave in resultado:
             cpf_criptografada = descriptografia(cpf)
             titulo_criptografada = descriptografia(titulo)
-            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave}")
+            chave_criptografada = descriptografia(chave)
+            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave_criptografada}")
     else:
         print("Nenhum eleitor encontrado.")
 
@@ -246,7 +247,8 @@ def listar_eleitores():
     for (id, nome, cpf, titulo, status, mesario, chave) in cursor.fetchall():
         cpf_criptografada = descriptografia(cpf)
         titulo_criptografada = descriptografia(titulo)
-        print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave}")
+        chave_criptografada = descriptografia(chave)
+        print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave_criptografada}")
         
 def excluir_eleitor(valor):
     """
