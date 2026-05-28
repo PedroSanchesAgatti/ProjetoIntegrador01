@@ -215,7 +215,7 @@ def buscar_eleitor(valor):
     
     valor_criptografada = criptografia(valor)
     sql = """
-    SELECT id, nome, cpf, titulo, status_voto , mesario
+    SELECT id, nome, cpf, titulo, status_voto , mesario, chave_acesso
     FROM eleitores
     WHERE titulo = %s OR cpf = %s
     """
@@ -224,10 +224,10 @@ def buscar_eleitor(valor):
     resultado = cursor.fetchall()
     
     if resultado:
-        for id, nome, cpf, titulo, status, mesario in resultado:
+        for id, nome, cpf, titulo, status, mesario, chave in resultado:
             cpf_criptografada = descriptografia(cpf)
             titulo_criptografada = descriptografia(titulo)
-            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"}")
+            print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave}")
     else:
         print("Nenhum eleitor encontrado.")
 
@@ -241,12 +241,12 @@ def listar_eleitores():
     Returns:
         None
     """
-    cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario FROM eleitores")
+    cursor.execute("SELECT id, nome, cpf, titulo, status_voto, mesario, chave_acesso FROM eleitores")
     
-    for (id, nome, cpf, titulo, status, mesario) in cursor.fetchall():
+    for (id, nome, cpf, titulo, status, mesario, chave) in cursor.fetchall():
         cpf_criptografada = descriptografia(cpf)
         titulo_criptografada = descriptografia(titulo)
-        print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"}")
+        print(f"ID: {id} | Nome: {nome} | CPF: {cpf_criptografada} | Titulo: {titulo_criptografada} | Votou: {"Sim" if status == 1 else "Não"} | Mesário: {"Sim" if mesario == 1 else "Não"} | Chave: {chave}")
         
 def excluir_eleitor(valor):
     """
