@@ -843,6 +843,14 @@ def votos_partido():
             f"Partido: {partido} | "
             f"Votos: {votos}"
         )
+    cursor.execute("""
+        SELECT COUNT(*) 
+        FROM votos 
+        WHERE id_candidato IS NULL
+    """)
+    
+    votos_nulos=cursor.fetchone()[0]
+    print(f"\nVotos nulos:{votos_nulos}")
 
 
 def listar_votos():
