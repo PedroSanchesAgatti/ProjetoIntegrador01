@@ -467,7 +467,7 @@ def exibir_protocolos():
 
     if resultados:
         for protocolo in resultados:
-            print(protocolo[0])
+            print(descriptografia(protocolo[0]))
     else:
         print("Nenhum protocolo encontrado.")
 
